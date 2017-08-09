@@ -98,7 +98,7 @@ AWS.Shadow.setStateHandler(function(ud, ev, reported, desired, reported_md, desi
       //Sys.usleep(10e6);
       print('Deep:', "Sleep");
       let deepSleep = ffi('int mgos_system_deep_sleep_d(double)');
-      deepSleep(10000000);
+      deepSleep(30*60e6);
     }, null);
     return;
   }
