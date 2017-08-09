@@ -5,7 +5,7 @@ load("api_sys.js");
 load("api_timer.js");
 load('api_esp8266.js');
 load('api_config.js');
-
+ 
 /*using flashBtn as the trigger
  //using builtin led as output
  //shadow {
