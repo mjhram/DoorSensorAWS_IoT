@@ -34,7 +34,7 @@ Additional:
 	=false normal operation
 -to reserve power, deepsleep until alarm is triggered. return to deep sleep in the following cases:
 	-clear alarm remotely, by ledOn:false
-	-30min passed
+	-clear alarm after 30min passed
  
 
 	
