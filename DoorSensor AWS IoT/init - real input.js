@@ -6,24 +6,14 @@ load("api_timer.js");
 load('api_esp8266.js');
 load('api_config.js');
 
-/*using flashBtn as the trigger
- //using builtin led as output
- //shadow {
- ledOn => led state
- counter => triggering count
- }
- //if flashBtn is triggered => led=on and keep it on (alarm simulation) untill shadow is changed
- // if shadow->ledon=false => turn off led
- */
-
 // Constants for ESP8266
 // TODO: support other platforms
 let LED_GPIO = 2;
 let LED_OFF = false;
 let LED_ON = true;
 let BUTTON_GPIO = 4;
-let BUTTON_PULL = GPIO.PULL_DOWN;
-let BUTTON_EDGE = GPIO.INT_EDGE_POS;
+//let BUTTON_PULL = GPIO.PULL_DOWN;
+//let BUTTON_EDGE = GPIO.INT_EDGE_POS;
 
 let state = {
   counter: 0,
@@ -76,8 +66,8 @@ function reportState() {
 GPIO.set_mode(LED_GPIO, GPIO.MODE_OUTPUT);
 updateLed();
 
-GPIO.set_button_handler(
-    BUTTON_GPIO, BUTTON_PULL, BUTTON_EDGE, 200 /*debounce ms*/,
+/*GPIO.set_button_handler(
+    BUTTON_GPIO, BUTTON_PULL, BUTTON_EDGE, 200 ,
     function(pin, ud) {
       let updRes = AWS.Shadow.update(0, {
         desired: {
@@ -88,6 +78,7 @@ GPIO.set_button_handler(
       print("Click! Updated:", updRes);
     }, null
 );
+*/
 
 AWS.Shadow.setStateHandler(function(ud, ev, reported, desired, reported_md, desired_md) {
   print('Event:', ev, '('+AWS.Shadow.eventName(ev)+')');
@@ -98,7 +89,7 @@ AWS.Shadow.setStateHandler(function(ud, ev, reported, desired, reported_md, desi
       //Sys.usleep(10e6);
       print('Deep:', "Sleep");
       let deepSleep = ffi('int mgos_system_deep_sleep_d(double)');
-      deepSleep(30*60e6);
+      deepSleep(60*60e6);
     }, null);
     return;
   }
