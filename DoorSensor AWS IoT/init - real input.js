@@ -1,4 +1,3 @@
-// Load Mongoose OS API
 load('api_aws.js');
 load('api_gpio.js');
 load("api_sys.js");
@@ -6,18 +5,14 @@ load("api_timer.js");
 load('api_esp8266.js');
 load('api_config.js');
 
-// Constants for ESP8266
 // TODO: support other platforms
 let LED_GPIO = 2;
 let LED_OFF = false;
 let LED_ON = true;
 let BUTTON_GPIO = 4;
-//let BUTTON_PULL = GPIO.PULL_DOWN;
-//let BUTTON_EDGE = GPIO.INT_EDGE_POS;
 
 let state = {
   counter: 0,
-  //bar: 0,
   ledOn: LED_OFF,
   sts: 0//sensor state
 };
@@ -31,7 +26,7 @@ function updateLed() {
       let updRes = AWS.Shadow.update(0, {
         desired: {
           counter: state.counter + 1,
-          ledOn: LED_OFF//!state.ledOn,
+          ledOn: LED_OFF
         }
       });
       timerid = -1;
@@ -44,15 +39,10 @@ function updateState(newSt) {
   if (newSt.counter !== undefined) {
     state.counter = newSt.counter;
   }
-  /*if (newSt.bar !== undefined) {
-   state.bar = newSt.bar;
-   }*/
+
   if (newSt.ledOn !== undefined) {
     state.ledOn = newSt.ledOn;
   }
-  //if desired.chk = 1 => update sts & chk=0
-  //this should be here, since it will cause update state muliple times
-
 }
 
 function reportState() {
@@ -66,27 +56,12 @@ function reportState() {
 GPIO.set_mode(LED_GPIO, GPIO.MODE_OUTPUT);
 updateLed();
 
-/*GPIO.set_button_handler(
-    BUTTON_GPIO, BUTTON_PULL, BUTTON_EDGE, 200 ,
-    function(pin, ud) {
-      let updRes = AWS.Shadow.update(0, {
-        desired: {
-          counter: state.counter + 1,
-          ledOn: LED_ON//!state.ledOn,
-        }
-      });
-      print("Click! Updated:", updRes);
-    }, null
-);
-*/
-
 AWS.Shadow.setStateHandler(function(ud, ev, reported, desired, reported_md, desired_md) {
   print('Event:', ev, '('+AWS.Shadow.eventName(ev)+')');
 
   if (ev === AWS.Shadow.CONNECTED) {
     reportState();
     Timer.set(1*60*1000 , false /* once */, function() {
-      //Sys.usleep(10e6);
       print('Deep:', "Sleep");
       let deepSleep = ffi('int mgos_system_deep_sleep_d(double)');
       deepSleep(60*60e6);
@@ -101,10 +76,6 @@ AWS.Shadow.setStateHandler(function(ud, ev, reported, desired, reported_md, desi
   print('Reported state:', JSON.stringify(reported));
   print('Desired state :', JSON.stringify(desired));
 
-  /*
-   * Here we extract values from previosuly reported state (if any)
-   * and then override it with desired state (if present).
-   */
   updateState(reported);
   updateState(desired);
   updateLed();
@@ -112,12 +83,6 @@ AWS.Shadow.setStateHandler(function(ud, ev, reported, desired, reported_md, desi
   print('New state:', JSON.stringify(state));
 
   if (ev === AWS.Shadow.UPDATE_DELTA) {
-    //if desired.chk = 1 => update sts.
-    // this will also loop it
-    /*if (desired.chk !== undefined && desired.chk==1) {
-     state.chk = 0;
-     state.sts = GPIO.read(BUTTON_GPIO);
-     }*/
     reportState();
   }
 }, null);
