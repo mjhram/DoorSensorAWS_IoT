@@ -1,7 +1,4 @@
 {
-  "device": {
-    "id": "esp8266_07205C"
-  },
   "mqtt": {
     "enable": true,
     "server": "a3aeea8jt9w0dv.iot.us-east-2.amazonaws.com:8883",
