@@ -2,8 +2,8 @@
   "mqtt": {
     "enable": true,
     "server": "a3aeea8jt9w0dv.iot.us-east-2.amazonaws.com:8883",
-    "ssl_cert": "aws-iot-dbf3bd6e1c.crt.pem",
-    "ssl_key": "aws-iot-dbf3bd6e1c.key.pem",
+    "ssl_cert": "aws-iot-3e85f90c5a.crt.pem",
+    "ssl_key": "aws-iot-3e85f90c5a.key.pem",
     "ssl_ca_cert": "ca.pem"
   },
   "wifi": {

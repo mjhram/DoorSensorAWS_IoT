@@ -1,3 +1,4 @@
+Docker Toolbox detected
 Handling lib "aws"...
 The --lib flag was not given for it, checking repository
 Prepared local dir: "C:\\Users\\admin\\.mos\\libs-1.14\\aws-1.14"
@@ -48,5 +49,5 @@ Already handled, skipping
 Handling lib "mjs"...
 The --lib flag was not given for it, checking repository
 Prepared local dir: "C:\\Users\\admin\\.mos\\libs-1.14\\mjs-1.14"
-Connecting to https://mongoose.cloud, user test
-Uploading sources (4922 bytes)
+The flag --module is not given for the module "mjs", going to use the repository
+Using mongoose-os located at "D://0Dev//mongoose//mongoose-os"
