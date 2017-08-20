@@ -19,7 +19,7 @@ let state = {
 GPIO.set_mode(led, GPIO.MODE_OUTPUT);
 Timer.set(1000 , true , function() {
   let value = GPIO.toggle(led);
-  print(value ? 'Tick' : 'Tock', 'uptime:', Sys.uptime(), getInfo());
+  print(value ? 'Tick' : 'Tock', 'uptime:');
 }, null);
 
 function updateState(newSt) {
