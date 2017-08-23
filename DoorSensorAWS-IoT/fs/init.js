@@ -9,7 +9,7 @@ load('api_config.js');
 // Constants for ESP8266
 // TODO: support other platforms
 let led = 2;
-let SENSOR = 0;
+let SENSOR = 5;
 
 let state = {
   counter: 0,
@@ -38,6 +38,8 @@ function reportState() {
     reported: state,
   });
 }
+
+state.counter += 1;
 
 AWS.Shadow.setStateHandler(function(ud, ev, reported, desired, reported_md, desired_md) {
   print('Event:', ev, '('+AWS.Shadow.eventName(ev)+')');
