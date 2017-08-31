@@ -1,3 +1,8 @@
+2017Aug8:
+---------
+V.1 is over. Working on battery is not feasable since it will last for less than a week.
+
+
 features:
 - AWS shadow state:
 	{

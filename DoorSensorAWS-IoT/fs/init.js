@@ -22,6 +22,38 @@ Timer.set(1000 , true , function() {
   print(value ? 'Tick' : 'Tock', 'uptime:');
 }, null);
 
+GPIO.set_mode(SENSOR, GPIO.MODE_INPUT);
+GPIO.set_int_handler(SENSOR, GPIO.INT_EDGE_ANY, function(pin) {
+  state.sts = GPIO.read(SENSOR);
+  AWS.Shadow.update(0, {
+    desired: {
+      counter: state.counter + 1,
+      sts: state.sts
+      //ledOn: LED_ON//!state.ledOn,
+    }
+  });
+  if(state.sts == 1) {
+    print("Door Opened");
+  } else {
+    print("Door Closed");
+  }
+
+}, null);
+GPIO.enable_int(pin);
+
+/*GPIO.set_button_handler(
+    SENSOR, GPIO.PULL_DOWN, GPIO.INT_EDGE_POS, 200 ,
+    function(pin, ud) {
+      let updRes = AWS.Shadow.update(0, {
+        desired: {
+          counter: state.counter + 1,
+          //ledOn: LED_ON//!state.ledOn,
+        }
+      });
+      print("Click! Updated:", updRes);
+    }, null
+);*/
+
 function updateState(newSt) {
   if (newSt.counter !== undefined) {
     state.counter = newSt.counter;
@@ -39,17 +71,26 @@ function reportState() {
   });
 }
 
-state.counter += 1;
+MQTT.setEventHandler(function(conn, ev, edata) {
+  if (ev !== 0)  {
+    if(ev === MQTT.EV_CLOSE) {
+      print('MQTT closed');
+    }
+    print('MQTT event handler: got', ev);
+  }
+
+}, null);
 
 AWS.Shadow.setStateHandler(function(ud, ev, reported, desired, reported_md, desired_md) {
   print('Event:', ev, '('+AWS.Shadow.eventName(ev)+')');
 
   if (ev === AWS.Shadow.CONNECTED) {
     reportState();
-    Timer.set(3*60*1000 , false , function() {
-      print('Deep:', "Sleep");
+    //remove deep sleep
+    Timer.set(30*60*1000 , false , function() {//heart beat
+     /*print('Deep:', "Sleep");
       let deepSleep = ffi('int mgos_system_deep_sleep_d(double)');
-      deepSleep(60*60e6);
+      deepSleep(60*60e6);*/
     }, null);
     return;
   }
